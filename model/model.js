@@ -1,6 +1,11 @@
 const mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost:27017');
+const mongoUri = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/promptify';
+
+mongoose.connect(mongoUri)
+  .then(() => console.log('MongoDB connected successfully'))
+  .catch((err) => console.error('MongoDB connection failed:', err.message));
+
 const userSchema = new mongoose.Schema({
   email: String,
   password: String,

@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Prompt - PromptHub</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+  
+  <style>
+    .create-hero {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      padding: 3rem 2rem;
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .create-title {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: white;
+      margin-bottom: 1rem;
+    }
+
+    .create-subtitle {
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 1.1rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .form-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    .form-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2.5rem;
+      box-shadow: var(--shadow-lg);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .form-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+    }
+
+    .form-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .form-icon {
+      font-size: 3rem;
+      color: var(--primary);
+      margin-bottom: 1rem;
+    }
+
+    .form-title {
+      color: var(--text-primary);
+      font-size: 1.75rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .form-description {
+      color: var(--text-secondary);
+      font-size: 1rem;
+    }
+
+    .form-group {
+      margin-bottom: 2rem;
+    }
+
+    .form-label {
+      display: block;
+      color: var(--text-primary);
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+      font-size: 1rem;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 1rem 1.25rem;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text-primary);
+      font-size: 1rem;
+      transition: var(--transition);
+      font-family: inherit;
+    }
+
+    .form-textarea {
+      min-height: 200px;
+      resize: vertical;
+      line-height: 1.6;
+    }
+
+    .form-input:focus,
+    .form-textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      background: rgba(255, 255, 255, 0.1);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    }
+
+    .form-input::placeholder,
+    .form-textarea::placeholder {
+      color: var(--text-muted);
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      margin-top: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text-primary);
+      border: 1px solid var(--border);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: var(--primary);
+    }
+
+    .form-tips {
+      background: rgba(99, 102, 241, 0.1);
+      border: 1px solid rgba(99, 102, 241, 0.2);
+      border-radius: var(--radius-sm);
+      padding: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .tips-title {
+      color: var(--primary);
+      font-weight: 600;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .tips-list {
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+      line-height: 1.6;
+    }
+
+    .tips-list li {
+      margin-bottom: 0.5rem;
+    }
+
+    .character-count {
+      text-align: right;
+      color: var(--text-muted);
+      font-size: 0.875rem;
+      margin-top: 0.5rem;
+    }
+
+    .character-count.limit {
+      color: var(--danger);
+    }
+
+    @media (max-width: 768px) {
+      .create-hero {
+        padding: 2rem 1rem;
+      }
+      
+      .create-title {
+        font-size: 2rem;
+      }
+      
+      .form-container {
+        padding: 0 1rem;
+      }
+      
+      .form-card {
+        padding: 2rem 1.5rem;
+      }
+      
+      .form-actions {
+        flex-direction: column;
+      }
+      
+      .btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="header-content">
+      <div class="logo">
+        <i class="fas fa-lightbulb"></i> PromptHub
+      </div>
+      <nav class="nav-links">
+        <a href="/home" class="nav-link">
+          <i class="fas fa-home"></i> Home
+        </a>
+        <a href="/post" class="nav-link">
+          <i class="fas fa-plus"></i> Create
+        </a>
+        <a href="/profile" class="nav-link">
+          <i class="fas fa-user"></i> Profile
+        </a>
+        <a href="/logout" class="nav-link">
+          <i class="fas fa-sign-out-alt"></i> Logout
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Create Hero -->
+  <div class="create-hero">
+    <h1 class="create-title">Create Amazing Prompts</h1>
+    <p class="create-subtitle">Share your creativity with the community and inspire others</p>
+  </div>
+
+  <!-- Main Content -->
+  <main class="form-container">
+    <div class="form-card">
+      <div class="form-header">
+        <div class="form-icon">
+          <i class="fas fa-lightbulb"></i>
+        </div>
+        <h2 class="form-title">Create New Prompt</h2>
+        <p class="form-description">Craft a compelling prompt that others will love</p>
+      </div>
+
+      <form action="/post" method="POST" id="promptForm">
+        <div class="form-group">
+          <label for="title" class="form-label">
+            <i class="fas fa-heading" style="color: var(--primary); margin-right: 0.5rem;"></i>
+            Prompt Title
+          </label>
+          <input 
+            type="text" 
+            id="title" 
+            name="title" 
+            class="form-input" 
+            placeholder="Enter a catchy and descriptive title..."
+            required
+            maxlength="100"
+          >
+          <div class="character-count">
+            <span id="titleCount">0</span>/100 characters
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="content" class="form-label">
+            <i class="fas fa-edit" style="color: var(--primary); margin-right: 0.5rem;"></i>
+            Prompt Content
+          </label>
+          <textarea 
+            id="content" 
+            name="content" 
+            class="form-input form-textarea" 
+            placeholder="Write your amazing prompt here... Be creative, clear, and inspiring!"
+            required
+            maxlength="2000"
+          ></textarea>
+          <div class="character-count">
+            <span id="contentCount">0</span>/2000 characters
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <a href="/home" class="btn btn-secondary">
+            <i class="fas fa-arrow-left btn-icon"></i>
+            Cancel
+          </a>
+          <button type="submit" class="btn btn-primary">
+            <i class="fas fa-save btn-icon"></i>
+            Create Prompt
+          </button>
+        </div>
+      </form>
+
+      <div class="form-tips">
+        <div class="tips-title">
+          <i class="fas fa-lightbulb"></i>
+          Tips for Great Prompts
+        </div>
+        <ul class="tips-list">
+          <li><strong>Be specific:</strong> Clear, detailed prompts work better than vague ones</li>
+          <li><strong>Use examples:</strong> Include sample outputs when possible</li>
+          <li><strong>Keep it concise:</strong> Aim for clarity without unnecessary words</li>
+          <li><strong>Test it:</strong> Try your prompt before sharing to ensure it works well</li>
+          <li><strong>Be creative:</strong> Unique and innovative prompts get more engagement</li>
+        </ul>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-content">
+      <p>&copy; 2024 PromptHub. Made with <i class="fas fa-heart" style="color: var(--danger);"></i> for creators</p>
+    </div>
+  </footer>
+
+  <script>
+    // Character count functionality
+    const titleInput = document.getElementById('title');
+    const contentTextarea = document.getElementById('content');
+    const titleCount = document.getElementById('titleCount');
+    const contentCount = document.getElementById('contentCount');
+
+    function updateCount(input, countElement, maxLength) {
+      const length = input.value.length;
+      countElement.textContent = length;
+      
+      if (length > maxLength * 0.9) {
+        countElement.parentElement.classList.add('limit');
+      } else {
+        countElement.parentElement.classList.remove('limit');
+      }
+    }
+
+    titleInput.addEventListener('input', () => {
+      updateCount(titleInput, titleCount, 100);
+    });
+
+    contentTextarea.addEventListener('input', () => {
+      updateCount(contentTextarea, contentCount, 2000);
+    });
+
+    // Form validation
+    document.getElementById('promptForm').addEventListener('submit', function(e) {
+      const title = titleInput.value.trim();
+      const content = contentTextarea.value.trim();
+      
+      if (title.length < 5) {
+        e.preventDefault();
+        alert('Title must be at least 5 characters long');
+        titleInput.focus();
+        return;
+      }
+      
+      if (content.length < 20) {
+        e.preventDefault();
+        alert('Prompt content must be at least 20 characters long');
+        contentTextarea.focus();
+        return;
+      }
+    });
+
+    // Auto-resize textarea
+    contentTextarea.addEventListener('input', function() {
+      this.style.height = 'auto';
+      this.style.height = Math.min(this.scrollHeight, 400) + 'px';
+    });
+  </script>
+</body>
+</html>

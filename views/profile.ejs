@@ -1,73 +1,107 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <%- include('partials/header') %>
-
-  <title>User Profile</title>
-  <link rel="stylesheet" href="/style.css"> <!-- link to public/style.css -->
+<%- include('head', {title: 'Profile'}) %>
+<%- include('nav') %>
 <style>
-  body {
-  font-family: Arial, sans-serif;
-  background: linear-gradient(120deg, #89f7fe, #66a6ff);
-  margin: 0;
-  padding: 0;
-}
-
-.profile-container {
-  max-width: 400px;
-  margin: 100px auto;
-  background: #fff;
-  padding: 25px;
-  border-radius: 12px;
-  box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
-  text-align: center;
-}
-
-h1 {
-  color: #333;
-}
-
-.profile-card {
-  margin-top: 20px;
-  text-align: left;
-  background: #f9f9f9;
-  padding: 15px;
-  border-radius: 8px;
-}
-
-.profile-card p {
-  margin: 8px 0;
-  font-size: 16px;
-}
-
-.logout-btn {
-  display: inline-block;
-  margin-top: 20px;
-  padding: 10px 18px;
-  background: #ff4b5c;
-  color: white;
-  text-decoration: none;
-  border-radius: 6px;
-  transition: 0.3s;
-}
-
-.logout-btn:hover {
-  background: #d43f4b;
-}
-
+.profile-page { padding: 40px 0 80px; position: relative; z-index: 1; }
+.profile-header-card { background: var(--s1); border: 1px solid var(--border); border-radius: var(--rl); padding: 32px; display: flex; align-items: center; gap: 28px; margin-bottom: 24px; flex-wrap: wrap; }
+.avatar { width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--accent-h)); display: flex; align-items: center; justify-content: center; font-size: 30px; font-weight: 800; color: white; flex-shrink: 0; border: 3px solid rgba(124,92,239,0.3); }
+.profile-info h1 { font-size: 24px; font-weight: 800; margin-bottom: 4px; }
+.profile-info .username { color: var(--accent); font-size: 14px; font-weight: 600; margin-bottom: 6px; }
+.profile-info .email { color: var(--t3); font-size: 13px; display: flex; align-items: center; gap: 5px; }
+.profile-actions { margin-left: auto; display: flex; gap: 8px; }
+.stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 32px; }
+.recent-section h2 { font-size: 17px; font-weight: 700; margin-bottom: 16px; }
+.recent-list { display: flex; flex-direction: column; gap: 10px; }
+.recent-item { background: var(--s1); border: 1px solid var(--border); border-radius: var(--rl); padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; gap: 16px; transition: all var(--tr); }
+.recent-item:hover { border-color: var(--border-h); transform: translateX(4px); }
+.recent-item-title { font-size: 14px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 300px; }
+.recent-item-meta { font-size: 12px; color: var(--t3); margin-top: 2px; display: flex; align-items: center; gap: 10px; }
+.recent-item-actions { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+@media (max-width: 768px) { .stats-row { grid-template-columns: 1fr 1fr; } .profile-header-card { flex-direction: column; text-align: center; } .profile-actions { margin-left: 0; } .recent-item-title { max-width: 180px; } }
 </style>
-</head>
-<body>
-  <div class="profile-container">
-    <h1>Welcome, <%= user.name %> 🎉</h1>
 
-    <div class="profile-card">
-      <p><strong>Email:</strong> <%= user.email %></p>
-      <p><strong>Username:</strong> <%= user.username %></p>
-      <p><strong>Age:</strong> <%= user.age %></p>
+<div class="page-wrap">
+  <div class="profile-page container" style="max-width:800px;">
+
+    <div class="profile-header-card slide-up">
+      <div class="avatar"><%= user.name ? user.name[0].toUpperCase() : 'U' %></div>
+      <div class="profile-info">
+        <h1><%= user.name %></h1>
+        <div class="username">@<%= user.username %></div>
+        <div class="email">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          <%= user.email %>
+        </div>
+      </div>
+      <div class="profile-actions">
+        <a href="/form" class="btn btn-ghost btn-sm">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          Edit Profile
+        </a>
+        <a href="/logout" class="btn btn-ghost btn-sm" style="color:var(--red);border-color:rgba(226,75,74,0.3);">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          Logout
+        </a>
+      </div>
     </div>
 
-    <a href="/logout" class="logout-btn">Logout</a>
+    <div class="stats-row">
+      <div class="stat-card slide-up stagger-1">
+        <span class="stat-label">Total Prompts</span>
+        <span class="stat-value"><%= user.post ? user.post.length : 0 %></span>
+        <span class="stat-sub">In your library</span>
+      </div>
+      <div class="stat-card slide-up stagger-2">
+        <span class="stat-label">Total Likes</span>
+        <span class="stat-value"><%= user.post ? user.post.reduce((a,p) => a + (p.likes ? p.likes.length : 0), 0) : 0 %></span>
+        <span class="stat-sub">Received from community</span>
+      </div>
+      <div class="stat-card slide-up stagger-3">
+        <span class="stat-label">Account Age</span>
+        <span class="stat-value"><%= user.age || '—' %></span>
+        <span class="stat-sub">Years old</span>
+      </div>
+    </div>
+
+    <div class="recent-section slide-up stagger-2">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+        <h2>Your Prompts</h2>
+        <a href="/post" class="btn btn-ghost btn-sm">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Add New
+        </a>
+      </div>
+      <% if (!user.post || user.post.length === 0) { %>
+      <div class="card" style="text-align:center;padding:40px;color:var(--t3);">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" style="margin-bottom:12px;opacity:0.4;"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        <p>No prompts yet. <a href="/post" style="color:var(--accent);">Create one →</a></p>
+      </div>
+      <% } else { %>
+      <div class="recent-list">
+        <% user.post.slice(0,8).forEach(function(p) { %>
+        <div class="recent-item">
+          <div>
+            <div class="recent-item-title"><%= p.title || 'Untitled' %></div>
+            <div class="recent-item-meta">
+              <span style="display:flex;align-items:center;gap:4px;">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+                <%= p.likes ? p.likes.length : 0 %> likes
+              </span>
+            </div>
+          </div>
+          <div class="recent-item-actions">
+            <a href="/edit/<%= p._id %>" class="btn btn-ghost btn-sm">Edit</a>
+          </div>
+        </div>
+        <% }) %>
+      </div>
+      <% if (user.post.length > 8) { %>
+      <div style="text-align:center;margin-top:16px;">
+        <a href="/home" class="btn btn-ghost btn-sm">View all <%= user.post.length %> prompts →</a>
+      </div>
+      <% } %>
+      <% } %>
+    </div>
   </div>
-</body>
-</html>
+</div>
+<script src="/main.js"></script>
+</body></html>

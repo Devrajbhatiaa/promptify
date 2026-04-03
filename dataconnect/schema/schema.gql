@@ -1,0 +1,44 @@
+type User @table {
+  displayName: String!
+  createdAt: Timestamp!
+  email: String
+  photoUrl: String
+}
+
+type Category @table {
+  name: String!
+}
+
+type Prompt @table {
+  title: String!
+  description: String!
+  createdAt: Timestamp!
+  creator: User
+  isPublic: Boolean
+}
+
+type Collection @table {
+  name: String!
+  createdAt: Timestamp!
+  owner: User
+  description: String
+  isPublic: Boolean
+}
+
+type CollectionPrompt @table(key: ["collection", "prompt"]) {
+  collection: Collection!
+  prompt: Prompt!
+  position: Int!
+}
+
+type Like @table {
+  createdAt: Timestamp!
+  user: User
+  prompt: Prompt
+  collection: Collection
+}
+
+type PromptCategory @table(key: ["prompt", "category"]) {
+  prompt: Prompt!
+  category: Category!
+}

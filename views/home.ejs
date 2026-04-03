@@ -1,157 +1,57 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <%- include('partials/header') %>
+<%- include('head') %>
+<%- include('nav') %>
+<style>
+.home-page { padding: 40px 0 80px; position: relative; z-index: 1; }
+.home-header { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 24px; flex-wrap: wrap; }
+.home-header h1 { font-size: 32px; font-weight: 800; margin-bottom: 6px; }
+.home-header p { color: var(--t2); font-size: 14px; }
+.prompts-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 18px; }
+.prompt-card { background: var(--s1); border: 1px solid var(--border); border-radius: var(--rl); padding: 20px; transition: all var(--tr); }
+.prompt-card:hover { border-color: var(--border-h); transform: translateY(-3px); }
+.prompt-title { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+.prompt-content { font-size: 13px; color: var(--t2); line-height: 1.7; margin-bottom: 14px; display: -webkit-box; line-clamp: 4; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+.prompt-footer { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding-top: 12px; }
+.stats { display: flex; gap: 14px; color: var(--t3); font-size: 12px; }
+</style>
 
-  <meta charset="UTF-8">
- 
-  <style>
-    
-
-    /* Dark theme base */
-    body {
-      font-family: "Segoe UI", sans-serif;
-      background-color: #121212;
-      color: #e0e0e0;
-      margin: 0;
-      padding: 0;
-    }
-
-    header {
-      background: #1e1e1e;
-      padding: 20px;
-      text-align: center;
-      border-bottom: 1px solid #2a2a2a;
-    }
- .copy-btn {
-      background: var(--primary);
-      color: white;
-      padding: 8px 0;
-      width: 100%;
-      text-align: center;
-      border-radius: var(--radius);
-      font-size: 0.85rem;
-      font-weight: 600;
-      text-decoration: none;
-      transition: var(--transition);
-      cursor: pointer;
-      border: none;
-    }
-
-    .copy-btn:hover {
-      background: var(--primary-hover);
-    }
-
-    
-    header h1 {
-      margin: 0;
-      font-size: 2rem;
-      background: linear-gradient(90deg, #00c6ff, #0072ff);
-      background-clip: text;
--webkit-background-clip: text; /* for WebKit browsers */
-
-      -webkit-text-fill-color: transparent;
-    }
-
-    .container {
-      max-width: 1000px;
-      margin: 40px auto;
-      padding: 0 20px;
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 20px;
-    }
-
-    .card {
-      background: #1e1e1e;
-      border-radius: 12px;
-      padding: 20px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 8px 20px rgba(0,0,0,0.6);
-    }
-
-    .card h2 {
-      font-size: 1.3rem;
-      color: #00c6ff;
-      margin-bottom: 10px;
-    }
-
-    .card .content {
-      flex: 1;
-      max-height: 150px; /* fixed height */
-      overflow-y: auto;
-      padding-right: 6px;
-      font-size: 0.95rem;
-      line-height: 1.5;
-      color: #cfcfcf;
-    }
-
-    /* custom scrollbar */
-    .card .content::-webkit-scrollbar {
-      width: 6px;
-    }
-    .card .content::-webkit-scrollbar-thumb {
-      background: #444;
-      border-radius: 4px;
-    }
-    .card .content::-webkit-scrollbar-thumb:hover {
-      background: #666;
-    }
-
-    footer {
-      text-align: center;
-      padding: 20px;
-      border-top: 1px solid #2a2a2a;
-      margin-top: 40px;
-      font-size: 0.9rem;
-      color: #666;
-    }
-  </style>
-</head>
-<body>
- 
-
-  <main>
-    <div class="container">
-      <% if (prompts.length === 0) { %>
-        <p>No prompts yet. Be the first to create one!</p>
-      <% } else { %>
-        <% prompts.forEach(prompt => { %>
-          <div class="card">
-            <h2><%= prompt.title %></h2>
-            <div class="content">
-              <%= prompt.content %>
-            </div>
-             <div class="actions">
-          <button class="copy-btn"href="/like/<%= user._id%>"><a href="/like/<%= user._id%>">Like</a></a></button>
-
-            <button class="copy-btn" onclick="copyToClipboard('<%= prompts._id %>')">📋 Copy</button>
-          </div>
-          </div>
-        <% }) %>
-      <% } %>
-      
+<div class="page-wrap">
+  <div class="container home-page">
+    <div class="home-header slide-up">
+      <div>
+        <h1>My Prompts</h1>
+        <p>Manage and review your created prompts.</p>
+      </div>
+      <a href="/post" class="btn btn-primary">Create Prompt</a>
     </div>
-    
-  </main>
 
-  <footer>
-    Made with ❤️ | Dark Mode UI
-  </footer>
-  <script>
-    function copyToClipboard(id) {
-      const text = document.getElementById(`content-${id}`).innerText;
-      navigator.clipboard.writeText(text).then(() => {
-        alert("Prompt copied to clipboard!");
-      });
-    }
-  </script>
-</body>
-</html>
+    <% if (!prompts || prompts.length === 0) { %>
+      <div class="empty-state">
+        <h3>No prompts yet</h3>
+        <p>Create your first prompt to get started.</p>
+        <a href="/post" class="btn btn-primary" style="margin-top:12px;">Add Prompt</a>
+      </div>
+    <% } else { %>
+      <div class="prompts-grid">
+        <% prompts.forEach(function(prompt, idx) { %>
+          <div class="prompt-card slide-up">
+            <div class="prompt-title"><%= prompt.title %></div>
+            <div class="prompt-content"><%= prompt.content %></div>
+            <div class="prompt-footer">
+              <div class="stats">
+                <span>Likes: <%= prompt.likes ? prompt.likes.length : 0 %></span>
+                <span>Views: <%= prompt.views || 0 %></span>
+              </div>
+              <div style="display:flex;gap:8px;">
+                <a href="/edit/<%= prompt._id %>" class="btn btn-ghost btn-sm">Edit</a>
+                <a href="/post/view/<%= prompt._id %>" class="btn btn-ghost btn-sm">View</a>
+              </div>
+            </div>
+          </div>
+        <% }); %>
+      </div>
+    <% } %>
+  </div>
+</div>
+
+<script src="/main.js"></script>
+</body></html>
