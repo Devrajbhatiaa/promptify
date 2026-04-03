@@ -1,107 +1,66 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Login</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        body {
-            background: linear-gradient(120deg, #2980b9, #6dd5fa, #ffffff);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        .login-container {
-            background: #fff;
-            padding: 2.5rem 2rem;
-            border-radius: 1rem;
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
-            width: 100%;
-            max-width: 350px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .login-container h2 {
-            margin-bottom: 1.5rem;
-            color: #2980b9;
-            font-weight: 600;
-        }
-        .login-container form {
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-        }
-        .form-group {
-            margin-bottom: 1.2rem;
-            width: 100%;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: #333;
-            font-size: 1rem;
-        }
-        .form-group input {
-            width: 100%;
-            padding: 0.7rem;
-            border: 1px solid #b2bec3;
-            border-radius: 0.5rem;
-            font-size: 1rem;
-            transition: border 0.2s;
-        }
-        .form-group input:focus {
-            border-color: #2980b9;
-            outline: none;
-        }
-        .login-btn {
-            background: #2980b9;
-            color: #fff;
-            padding: 0.8rem;
-            border: none;
-            border-radius: 0.5rem;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-        .login-btn:hover {
-            background: #2573a6;
-        }
-        .signup-link {
-            margin-top: 1.2rem;
-            font-size: 0.95rem;
-            color: #636e72;
-        }
-        .signup-link a {
-            color: #2980b9;
-            text-decoration: none;
-            font-weight: 500;
-        }
-        .signup-link a:hover {
-            text-decoration: underline;
-        }
-    </style>
-</head>
-<body>
-    <div class="login-container">
-        <h2>Login</h2>
-        <form action="/login" method="POST">
-            <div class="form-group">
-                <label for="email">Email Address</label>
-                <input type="email" id="email" name="email" required autocomplete="username">
-            </div>
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" required autocomplete="current-password">
-            </div>
-            <button type="submit" class="login-btn">Login</button>
-        </form>
-        <div class="signup-link">
-            Don't have an account? <a href="/signin">Sign up</a>
-        </div>
+<%- include('head', {title: 'Sign In'}) %>
+<style>
+.auth-page { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 40px 20px; position: relative; z-index: 1; }
+.auth-card { background: var(--s1); border: 1px solid var(--border); border-radius: 20px; padding: 44px; width: 100%; max-width: 420px; }
+.auth-logo { font-size: 14px; font-weight: 800; letter-spacing: 3px; color: var(--accent); margin-bottom: 28px; display: block; }
+.auth-title { font-size: 26px; font-weight: 800; margin-bottom: 6px; }
+.auth-sub { color: var(--t2); font-size: 14px; margin-bottom: 36px; }
+.auth-form { display: flex; flex-direction: column; gap: 18px; }
+.pw-wrap { position: relative; }
+.pw-wrap .form-input { padding-right: 44px; }
+.pw-toggle { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--t3); padding: 4px; transition: color var(--tr); }
+.pw-toggle:hover { color: var(--t2); }
+.auth-bottom { text-align: center; margin-top: 24px; font-size: 13px; color: var(--t3); }
+.auth-bottom a { color: var(--accent); font-weight: 600; }
+.auth-bottom a:hover { color: var(--accent-h); }
+.auth-error { background: var(--red-bg); border: 1px solid rgba(226,75,74,0.25); border-radius: var(--r); padding: 12px 16px; color: var(--red); font-size: 13px; display: flex; align-items: center; gap: 8px; }
+</style>
+
+<div class="auth-page">
+  <div class="auth-card scale-in">
+    <span class="auth-logo">PROMPTIFY</span>
+    <h1 class="auth-title">Welcome back</h1>
+    <p class="auth-sub">Sign in to your account to continue.</p>
+
+    <% if (typeof error !== 'undefined' && error) { %>
+    <div class="auth-error">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+      <%= error %>
     </div>
+    <% } %>
+
+    <form class="auth-form" action="/login" method="POST">
+      <div class="form-group">
+        <label class="form-label">Email address</label>
+        <input type="email" name="email" class="form-input" placeholder="you@example.com" required autocomplete="email"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <div class="pw-wrap">
+          <input type="password" name="password" id="pw" class="form-input" placeholder="Enter your password" required autocomplete="current-password"/>
+          <button type="button" class="pw-toggle" onclick="togglePw()">
+            <svg id="pw-eye" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary btn-full" style="margin-top:4px;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+        Sign In
+      </button>
+    </form>
+
+    <div class="auth-bottom">
+      Don't have an account? <a href="/signin">Create one</a>
+    </div>
+  </div>
+</div>
+
+<script src="/main.js"></script>
+<script>
+function togglePw() {
+  const pw = document.getElementById('pw');
+  pw.type = pw.type === 'password' ? 'text' : 'password';
+}
+</script>
 </body>
 </html>

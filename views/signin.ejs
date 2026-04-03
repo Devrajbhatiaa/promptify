@@ -1,119 +1,67 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+<%- include('head', {title: 'Create Account'}) %>
+<style>
+.auth-page { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 40px 20px; position: relative; z-index: 1; }
+.auth-card { background: var(--s1); border: 1px solid var(--border); border-radius: 20px; padding: 44px; width: 100%; max-width: 440px; }
+.auth-logo { font-size: 14px; font-weight: 800; letter-spacing: 3px; color: var(--accent); margin-bottom: 28px; display: block; }
+.auth-title { font-size: 26px; font-weight: 800; margin-bottom: 6px; }
+.auth-sub { color: var(--t2); font-size: 14px; margin-bottom: 36px; }
+.auth-form { display: flex; flex-direction: column; gap: 16px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.pw-wrap { position: relative; }
+.pw-wrap .form-input { padding-right: 44px; }
+.pw-toggle { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--t3); padding: 4px; transition: color var(--tr); }
+.pw-toggle:hover { color: var(--t2); }
+.auth-bottom { text-align: center; margin-top: 24px; font-size: 13px; color: var(--t3); }
+.auth-bottom a { color: var(--accent); font-weight: 600; }
+@media (max-width: 480px) { .form-row { grid-template-columns: 1fr; } .auth-card { padding: 28px 20px; } }
+</style>
 
-    <meta charset="UTF-8">
-    <title>Sign In</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        body {
-            background: linear-gradient(120deg, #2980b9, #6dd5fa, #ffffff);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        .signin-container {
-            background: #fff;
-            padding: 2.5rem 2rem;
-            border-radius: 1rem;
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
-            width: 100%;
-            max-width: 350px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .signin-container h2 {
-            margin-bottom: 1.5rem;
-            color: #2980b9;
-            font-weight: 600;
-        }
-        .signin-container form {
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-        }
-        .form-group {
-            margin-bottom: 1.2rem;
-            width: 100%;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: #333;
-            font-size: 1rem;
-        }
-        .form-group input {
-            width: 100%;
-            padding: 0.7rem;
-            border: 1px solid #b2bec3;
-            border-radius: 0.5rem;
-            font-size: 1rem;
-            transition: border 0.2s;
-        }
-        .form-group input:focus {
-            border-color: #2980b9;
-            outline: none;
-        }
-        .signin-btn {
-            background: #2980b9;
-            color: #fff;
-            padding: 0.8rem;
-            border: none;
-            border-radius: 0.5rem;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-        .signin-btn:hover {
-            background: #2573a6;
-        }
-        .signup-link {
-            margin-top: 1.2rem;
-            font-size: 0.95rem;
-            color: #636e72;
-        }
-        .signup-link a {
-            color: #2980b9;
-            text-decoration: none;
-            font-weight: 500;
-        }
-        .signup-link a:hover {
-            text-decoration: underline;
-        }
-    </style>
-</head>
-<body>
-    <div class="signin-container">
-        <h2>Sign In</h2>
-        <form action="/signin" method="POST">
-            <div class="form-group">
-                <label for="name">Name</label>
-                <input type="text" id="name" name="name" required>
-            </div>
-            <div class="form-group">
-                <label for="username">Username</label>
-                <input type="text" id="username" name="username" required>
-            </div>
-            <div class="form-group">
-                <label for="age">Age</label>
-                <input type="number" id="age" name="age" min="1" required>
-            </div>
-            <div class="form-group">
-                <label for="email">Email Address</label>
-                <input type="email" id="email" name="email" required autocomplete="username">
-            </div>
-            <div class="form-group">
-                <label for="password">Password</label>  
-                <input type="password" id="password" name="password" required autocomplete="current-password">
-            </div>
-            <button type="submit" class="signin-btn">sign In</button>
-            <div class="signup-link">
-            Already have an account? <a href="/login">Login Now</a>
-        </form>
+<div class="auth-page">
+  <div class="auth-card scale-in">
+    <span class="auth-logo">PROMPTIFY</span>
+    <h1 class="auth-title">Create account</h1>
+    <p class="auth-sub">Join thousands of prompt engineers today.</p>
+
+    <form class="auth-form" action="/signin" method="POST">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Full name</label>
+          <input type="text" name="name" class="form-input" placeholder="Alex Johnson" required/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Username</label>
+          <input type="text" name="username" class="form-input" placeholder="alexj" required/>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email address</label>
+        <input type="email" name="email" class="form-input" placeholder="you@example.com" required autocomplete="email"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Age</label>
+        <input type="number" name="age" class="form-input" placeholder="25" min="13" max="120"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <div class="pw-wrap">
+          <input type="password" name="password" id="pw" class="form-input" placeholder="Create a strong password" required autocomplete="new-password"/>
+          <button type="button" class="pw-toggle" onclick="togglePw()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary btn-full" style="margin-top:4px;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+        Create Account
+      </button>
+    </form>
+
+    <div class="auth-bottom">
+      Already have an account? <a href="/login">Sign in</a>
     </div>
-</body>
-</html>
+  </div>
+</div>
+
+<script src="/main.js"></script>
+<script>function togglePw(){const p=document.getElementById('pw');p.type=p.type==='password'?'text':'password';}</script>
+</body></html>
