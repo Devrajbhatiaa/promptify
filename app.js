@@ -16,6 +16,7 @@ const postModel = require('./model/post');
 const ejs = require('ejs');
 const communityModel = require('./model/community');
 const commentModel = require('./model/comment');
+const dbConnect = require('./lib/dbConnect');
 
 const PORT = process.env.PORT || 3000;
 const isProduction = process.env.NODE_ENV === 'production';
@@ -28,6 +29,17 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Ensure DB connection is ready for each serverless invocation.
+app.use(async (req, res, next) => {
+  try {
+    await dbConnect();
+    next();
+  } catch (err) {
+    console.error('MongoDB connection failed:', err.message);
+    res.status(500).send('Database connection failed');
+  }
+});
 
 function setAuthCookie(res, token) {
   res.cookie('token', token, {
