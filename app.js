@@ -534,7 +534,7 @@ app.post('/contact', async (req, res) => {
 // Root
 app.get('/', (req, res) => {
   if (!req.cookies.token) {
-    return res.redirect('/login');
+    return res.render('index', { title: 'Welcome' });
   }
   return res.redirect('/home');
 });
