@@ -88,6 +88,33 @@ document.addEventListener('click', (e) => {
 
 // ========== NAV ACTIVE STATE ==========
 document.addEventListener('DOMContentLoaded', () => {
+  // theme toggle
+  const root = document.documentElement;
+  const themeToggles = document.querySelectorAll('#theme-toggle, #theme-toggle-mobile');
+  const getTheme = () => (root.getAttribute('data-theme') === 'light' ? 'light' : 'dark');
+  const applyThemeUI = () => {
+    const theme = getTheme();
+    themeToggles.forEach((btn) => {
+      const icon = btn.querySelector('.theme-icon');
+      const label = btn.querySelector('.theme-label');
+      if (icon) icon.textContent = theme === 'light' ? '☀️' : '🌙';
+      if (label) label.textContent = theme === 'light' ? 'Light' : 'Dark';
+      btn.setAttribute('aria-pressed', String(theme === 'light'));
+      btn.setAttribute('title', theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode');
+    });
+  };
+  const setTheme = (theme) => {
+    root.setAttribute('data-theme', theme);
+    try { localStorage.setItem('theme', theme); } catch (e) {}
+    applyThemeUI();
+  };
+  applyThemeUI();
+  themeToggles.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      setTheme(getTheme() === 'light' ? 'dark' : 'light');
+    });
+  });
+
   const path = window.location.pathname;
   document.querySelectorAll('.nav-links a, .mobile-menu a').forEach(link => {
     const href = link.getAttribute('href');

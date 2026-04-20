@@ -16,7 +16,7 @@
     <div class="form-card slide-up">
       <h1>Edit Prompt</h1>
       <p class="sub">Update your saved prompt.</p>
-      <form action="/post/<%= prompt._id %>/update" method="POST" class="form-stack">
+       <form action="/edit/<%= prompt._id %>" method="POST" class="form-stack">
         <div class="form-group">
           <label class="form-label">Prompt Title</label>
           <input type="text" name="title" class="form-input" value="<%= prompt.title %>" required/>

@@ -63,12 +63,18 @@
                 <%= community.prompts?.length || 0 %> prompts
               </span>
             </div>
-            <div class="comm-card-footer">
-              <a href="/community/<%= community._id %>" class="btn btn-primary btn-sm">View</a>
-              <% if (user) { %>
-                <a href="/community/join/<%= community.joinLink %>" class="btn btn-ghost btn-sm">Join</a>
-              <% } %>
-            </div>
+             <div class="comm-card-footer">
+               <a href="/community/<%= community._id %>" class="btn btn-primary btn-sm">View</a>
+               <% if (user) { %>
+                 <% if (userCommunityIds && userCommunityIds.includes(community._id.toString())) { %>
+                   <span class="btn btn-ghost btn-sm joined-badge">Joined</span>
+                <% } else { %>
+                   <form action="/community/<%= community._id %>/join" method="POST" style="display:inline;">
+                     <button type="submit" class="btn btn-ghost btn-sm">Join</button>
+                   </form>
+                 <% } %>
+               <% } %>
+             </div>
           </div>
         <% }); %>
       </div>

@@ -1,0 +1,48 @@
+<%- include('head', {title: 'Edit Profile'}) %>
+<%- include('nav') %>
+<style>
+  .form-page { padding: 40px 0 80px; position: relative; z-index: 1; }
+  .form-card { background: var(--s1); border: 1px solid var(--border); border-radius: var(--rx); padding: 40px; }
+  .form-card h1 { font-size: 24px; font-weight: 800; margin-bottom: 6px; }
+  .form-card .sub { color: var(--t2); font-size: 14px; margin-bottom: 32px; }
+  .form-stack { display: flex; flex-direction: column; gap: 20px; }
+  .form-footer { display: flex; align-items: center; gap: 12px; margin-top: 8px; flex-wrap: wrap; }
+  .back-link { font-size: 13px; color: var(--t2); text-decoration: none; display: flex; align-items: center; gap: 5px; transition: color var(--tr); }
+  .back-link:hover { color: var(--accent); }
+</style>
+
+<div class="page-wrap">
+  <div class="form-page container-xs" style="max-width:600px;">
+    <div class="form-card slide-up">
+      <h1>Edit Profile</h1>
+      <p class="sub">Update your account information.</p>
+      <form action="/profile/update" method="POST" class="form-stack">
+        <div class="form-group">
+          <label class="form-label">Full Name</label>
+          <input type="text" name="name" class="form-input" value="<%= user.name %>" required/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Username</label>
+          <input type="text" name="username" class="form-input" value="<%= user.username %>" required/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Age</label>
+          <input type="number" name="age" class="form-input" value="<%= user.age || '' %>" min="1"/>
+        </div>
+        <div class="form-footer">
+          <button type="submit" class="btn btn-primary">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            Save Changes
+          </button>
+          <a href="/profile" class="back-link">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+            Cancel
+          </a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<script src="/main.js"></script>
+</body>
+</html>

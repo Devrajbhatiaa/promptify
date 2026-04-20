@@ -35,14 +35,14 @@
       <p>Discover the most popular prompts from the community.</p>
     </div>
 
-    <div class="filters-row slide-up stagger-1">
-      <button class="filter-btn active">All</button>
-      <button class="filter-btn">Writing</button>
-      <button class="filter-btn">Coding</button>
-      <button class="filter-btn">Design</button>
-      <button class="filter-btn">Marketing</button>
-      <button class="filter-btn">Education</button>
-    </div>
+     <div class="filters-row slide-up stagger-1">
+       <button class="filter-btn <%= activeCategory === 'All' ? 'active' : '' %>" data-category="All">All</button>
+       <button class="filter-btn <%= activeCategory === 'Writing' ? 'active' : '' %>" data-category="writing">Writing</button>
+       <button class="filter-btn <%= activeCategory === 'Coding' ? 'active' : '' %>" data-category="coding">Coding</button>
+       <button class="filter-btn <%= activeCategory === 'Design' ? 'active' : '' %>" data-category="design">Design</button>
+       <button class="filter-btn <%= activeCategory === 'Marketing' ? 'active' : '' %>" data-category="marketing">Marketing</button>
+       <button class="filter-btn <%= activeCategory === 'Education' ? 'active' : '' %>" data-category="education">Education</button>
+     </div>
 
     <% if (posts.length === 0) { %>
       <div class="empty-state">
@@ -78,10 +78,10 @@
                   <svg viewBox="0 0 24 24" fill="<%= user && post.likes && post.likes.map(String).includes(String(user?._id)) ? 'currentColor' : 'none' %>" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
                   <%= post.likes?.length || 0 %>
                 </span>
-                <span>
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
-                  <%= post.views || 0 %>
-                </span>
+                 <span>
+                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                   <%= post.views || 0 %>
+                 </span>
               </div>
               <% if (post.category) { %>
                 <span class="category-tag"><%= post.category %></span>
@@ -94,5 +94,24 @@
   </div>
 </div>
 
-<script src="/main.js"></script>
+ <script src="/main.js"></script>
+ <script>
+   document.addEventListener('DOMContentLoaded', function() {
+     const filterButtons = document.querySelectorAll('.filter-btn');
+     filterButtons.forEach(btn => {
+       btn.addEventListener('click', function() {
+         const category = this.getAttribute('data-category');
+         filterButtons.forEach(b => b.classList.remove('active'));
+         this.classList.add('active');
+         const url = new URL(window.location.pathname, window.location.origin);
+         if (category === 'All') {
+           url.searchParams.delete('category');
+         } else {
+           url.searchParams.set('category', category);
+         }
+         window.location.href = url.toString();
+       });
+     });
+   });
+ </script>
 </body></html>

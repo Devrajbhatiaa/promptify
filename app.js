@@ -81,7 +81,12 @@ app.get('/communities', async (req, res) => {
       .populate('creator', 'name username')
       .sort({ memberCount: -1, createdAt: -1 });
     const user = await getCurrentUser(req);
-    res.render('communities', { communities, user });
+    let userCommunityIds = [];
+    if (user) {
+      const memberships = await communityModel.find({ 'members.user': user._id }).select('_id');
+      userCommunityIds = memberships.map(c => c._id.toString());
+    }
+    res.render('communities', { communities, user, userCommunityIds });
   } catch (err) {
     console.error(err);
     res.status(500).send('Error loading communities');
@@ -125,9 +130,15 @@ app.get('/community/:id', async (req, res) => {
       .sort({ createdAt: -1 });
     
     const user = await getCurrentUser(req);
-    const isMember = user && community.isMember(user._id);
+    let isMember = false;
+    if (user && community.members) {
+      isMember = community.members.some(m => 
+        m.user && m.user._id && m.user._id.toString() === user._id.toString()
+      );
+    }
     
-    res.render('communityDetail', { community, posts, user, isMember });
+    const baseUrl = `${req.protocol}://${req.get('host')}`;
+    res.render('communityDetail', { community, posts, user, isMember, baseUrl });
   } catch (err) {
     console.error(err);
     res.status(500).send('Error loading community');
@@ -185,13 +196,22 @@ app.post('/community/:id/leave', isLoggedin, async (req, res) => {
 // Trending
 app.get('/trending', async (req, res) => {
   try {
-    const posts = await postModel.find({ isDeleted: false })
+    const filter = { isDeleted: false };
+    let activeCategory = req.query.category || 'All';
+    if (activeCategory !== 'All') {
+      filter.category = activeCategory.toLowerCase();
+    }
+    const posts = await postModel.find(filter)
       .populate('author', 'name username')
       .populate('community', 'name')
       .sort({ createdAt: -1 });
     
     const user = await getCurrentUser(req);
-    res.render('trending', { posts, user });
+    // Capitalize category name for display
+    if (activeCategory !== 'All') {
+      activeCategory = activeCategory.charAt(0).toUpperCase() + activeCategory.slice(1);
+    }
+    res.render('trending', { posts, user, activeCategory });
   } catch (err) {
     console.error(err);
     res.status(500).send('Error loading trending prompts');
@@ -259,6 +279,16 @@ app.get('/profile', isLoggedin, async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).send('Error loading profile');
+  }
+});
+
+app.get('/profile/edit', isLoggedin, async (req, res) => {
+  try {
+    const user = await userModel.findOne({ email: req.user.email });
+    res.render('editProfile', { user });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error loading edit profile');
   }
 });
 
@@ -465,7 +495,7 @@ app.get('/edit/:id', isLoggedin, async (req, res) => {
       return res.redirect('/home');
     }
     
-    res.render('edit', { post, user });
+    res.render('edit', { prompt: post, user });
   } catch (err) {
     console.error(err);
     res.status(500).send('Error loading post');

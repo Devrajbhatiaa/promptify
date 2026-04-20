@@ -39,27 +39,27 @@
             </div>
           </div>
         </div>
-        <div class="comm-actions">
-          <% if (user && !isMember) { %>
-            <form action="/community/<%= community._id %>/join" method="POST">
-              <button type="submit" class="btn btn-primary">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
-                Join Community
-              </button>
-            </form>
-          <% } else if (user && isMember) { %>
-            <form action="/community/<%= community._id %>/leave" method="POST">
-              <button type="submit" class="btn btn-ghost">Leave</button>
-            </form>
-          <% } %>
-        </div>
+         <div class="comm-actions">
+           <% if (user) { %>
+             <% if (isMember) { %>
+               <span class="btn btn-ghost btn-sm joined-badge" style="opacity:1;color:var(--accent);border-color:var(--accent);cursor:default;">Joined</span>
+             <% } else { %>
+               <form action="/community/<%= community._id %>/join" method="POST">
+                 <button type="submit" class="btn btn-primary">
+                   <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+                   Join Community
+                 </button>
+               </form>
+             <% } %>
+           <% } %>
+         </div>
       </div>
       <% if (community.description) { %>
         <p class="comm-desc"><%= community.description %></p>
       <% } %>
       <div class="join-link-box">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
-        <input type="text" value="<%= process.env.CLIENT_URL || 'http://localhost:5033' %>/community/join/<%= community.joinLink %>" readonly id="joinLink"/>
+        <input type="text" value="<%= baseUrl %>/community/join/<%= community.joinLink %>" readonly id="joinLink"/>
         <button class="copy-btn" onclick="copyJoinLink()">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
         </button>
@@ -96,16 +96,16 @@
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
                 <%= post.likes?.length || 0 %>
               </span>
-              <span>
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
-                <%= post.views || 0 %>
-              </span>
+               <span>
+                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                 <%= post.views || 0 %>
+               </span>
               <span>by <%= post.author?.name || 'Unknown' %></span>
             </div>
           </a>
         <% }); %>
-      </div>
-    <% } %>
+        </div>
+      <% } %>
   </div>
 </div>
 
